@@ -16,6 +16,40 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+class Calculator {
+  constructor(){
+    this.result = 0;
+  }
+  function add(no) {
+    this.result += no;
+  }
+
+  function sub(no){
+    this.result -= no;
+  }
+
+  function mul(no){
+    this.result *= no;
+  }
+
+  function div(no){
+    if(no ==0) return undefined;
+    this.result = this.result/no;
+  }
+
+  function clear(){
+    this.result = 0;
+  }
+
+  function getResult(){
+    return this.result;
+  }
+  function calculate(str){
+    str = str.split(' ').join();
+
+  }
+
+}
+
 
 module.exports = Calculator;

@@ -43,7 +43,65 @@
   const bodyParser = require('body-parser');
   
   const app = express();
-  
+  const port = 3000;
+
+  let todos = [];
+
+  app.get("/todos", (req,res) =>{
+    res.status(200).json(todos);
+  })
+
+  app.get("/todos/:id", (req,res) =>{
+    const todo = todos.find( t => t.id === parseInt(req.params.id));
+    if(!todo){
+      console.log("Id is wrong");
+      res.status(404).send("Todo not found");
+    } else{
+      res.status(200).json(todo);
+    }
+  })
+
+  app.post("/todos", (req,res) =>{
+    const newTodo = {
+      id : Math.random() * 1000000,
+      title : req.body.title,
+      description : req.body.description
+    }
+    todos.push(newTodo);
+    res.status(201).send(newTodo);
+  })
+
+  app.put("/todos:id", (req,res) =>{
+    const todoIndex = todos.findIndex( t=> t.id === parseInt(req.params.id));
+    if(todoIndex === -1){
+      res.status(404).json("Todo Not Found");
+    }
+
+    todos[todoIndex].title = req.body.title;
+    todos[todoIndex].description = req.body.description;
+
+    res.status(201).json(todos[todoIndex]);
+
+  })
+
+  app.delete("/todos:id", (req,res) =>{
+    const todoIndex = todos.findIndex( t=> t.id === parseInt(req.params.id));
+    if(todoIndex === -1){
+      res.status(404).json("Todo not found");
+    }
+
+    todos.splice(todoIndex, 1);
+    res.status(200).json("Todo has been deleted");
+  })
+
   app.use(bodyParser.json());
+
+  app.use((req, res, next) => {     //for all other routes except the given one return 404
+    res.status(404).send();
+  });
+
+  app.listen(port, ()=>{
+    console.log("Currently listening on port 3000");
+  })
   
   module.exports = app;

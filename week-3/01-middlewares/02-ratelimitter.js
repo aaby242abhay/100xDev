@@ -11,9 +11,31 @@ const app = express();
 // You have been given a numberOfRequestsForUser object to start off with which
 // clears every one second
 
-let numberOfRequestsForUser = {};
+let numberOfRequestsForUser = [];
+
+function addReq(req, res, next){
+  const userId = req.headers.user-id;
+  const user = numberOfRequestsForUser.find(t=> t.userId === userId);
+  if(!user){
+    numberOfRequestsForUser.push({
+      userId : userId,
+      noOfReq : '1'
+    })
+    next();
+  }
+  else{
+    user.noOfReq++;
+    if(user.noOfReq > 5){
+      res.status(404).json({
+        'msg' : 'Blocked',
+      })
+    }else{}
+
+  }
+
+}
 setInterval(() => {
-    numberOfRequestsForUser = {};
+    numberOfRequestsForUser = [];
 }, 1000)
 
 app.get('/user', function(req, res) {

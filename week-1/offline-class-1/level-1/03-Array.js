@@ -54,8 +54,8 @@ concatExample([1, 2, 3], [4, 5, 6]);
 function forEachExample(arr) {
   console.log("Original Array:", arr);
 
-  arr.forEach(function(item, index) {
-    console.log(item, index);
+  arr.forEach(function(item, index) {         //forEach always take the item first and the index to be the second parameter
+    console.log(item, index);                 //it is the way it is and cannot be changed    
   });
 }
 forEachExample([1, 2, 3]);

@@ -1,6 +1,7 @@
 const request = require('supertest');
 const assert = require('assert');
 const express = require('express');
+const { error } = require('console');
 
 const app = express();
 let errorCount = 0;
@@ -11,6 +12,11 @@ let errorCount = 0;
 // 2. Maintain the errorCount variable whose value should go up every time there is an exception in any endpoint
 
 app.get('/user', function(req, res) {
+  // try {
+  //   throw new Error("User not found");
+  // } catch (err) {
+  //   next(err); // Pass the error to the error handling middleware
+  // }
   throw new Error("User not found");
   res.status(200).json({ name: 'john' });
 });
@@ -22,5 +28,12 @@ app.post('/user', function(req, res) {
 app.get('/errorCount', function(req, res) {
   res.status(200).json({ errorCount });
 });
+
+app.use((err,req, res, next)=>{
+  errorCount++;
+  res.status(404).json({
+    msg : "So are we correct"
+  })
+})
 
 module.exports = app;
